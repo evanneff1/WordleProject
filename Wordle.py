@@ -14,9 +14,12 @@ def wordle():
 
     def enter_action(s):
         gw.show_message("You have to implement this method.")
+        if s in FIVE_LETTER_WORDS:
+            print("Sucess")
 
     gw = WordleGWindow()
     gw.add_enter_listener(enter_action)
+
 
 # Startup code
 
