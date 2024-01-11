@@ -20,6 +20,11 @@ def wordle():
     gw = WordleGWindow()
     gw.add_enter_listener(enter_action)
 
+    location = random.randint(0,(len(FIVE_LETTER_WORDS)-1))
+    word = FIVE_LETTER_WORDS[location]
+
+    for x in range(N_COLS):
+        gw.set_square_letter(0,x,word[x].upper())
 
 # Startup code
 
