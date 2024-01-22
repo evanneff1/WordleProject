@@ -14,18 +14,20 @@ def wordle():
 
     def enter_action(s):
         row = gw.get_current_row()
-        x = 0
-        letters = []
-        while x < 5:
-            letter = gw.get_square_letter(row, x)
-            letters.append(letter)
-            x = x + 1
-        word = ''.join(letters)
-        
-        if word.lower() in FIVE_LETTER_WORDS:
-            gw.show_message('Congrats, Milestone 2 is complete!')
-        else: 
-            gw.show_message('Not in word list')
+        for x in range(0, N_ROWS):
+            x = 0
+            letters = []
+            while x < 5:
+                letter = gw.get_square_letter(row, x)
+                letters.append(letter)
+                x = x + 1
+            word = ''.join(letters)
+            
+            if word.lower() in FIVE_LETTER_WORDS:
+                gw.show_message('Congrats, Milestone 2 is complete!')
+            else: 
+                gw.show_message('Not in word list')
+            gw.set_current_row(row + 1)
 
     gw = WordleGWindow()
     gw.add_enter_listener(enter_action)
