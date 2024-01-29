@@ -1,9 +1,23 @@
 import random
 import tkinter as tk
 from WordleDictionary import FIVE_LETTER_WORDS
-from WordleGraphics import WordleGWindow, N_COLS, N_ROWS, CORRECT_COLOR, PRESENT_COLOR, MISSING_COLOR
+from WordleGraphics import WordleGWindow, N_COLS, N_ROWS
+import tkinter as tk
 
 def wordle():
+    def toggle_mode():
+        nonlocal CORRECT_COLOR, PRESENT_COLOR, MISSING_COLOR
+        if mode_button.cget("text") == "Switch to Colorblind Mode":
+            CORRECT_COLOR = "#228833"       # Light green for correct letters
+            PRESENT_COLOR = "#CCBB44"       # Brownish yellow for misplaced letters
+            MISSING_COLOR = "#999999"
+            mode_button.config(text="Switch to Regular Mode")
+        else:
+            CORRECT_COLOR = "#66BB66"  # Reset to original values for Regular Mode
+            PRESENT_COLOR = "#CCBB66"
+            MISSING_COLOR = "#999999"
+            mode_button.config(text="Switch to Colorblind Mode")
+
     total_guesses = 0
     correct_guesses = 0
     incorrect_guesses = 0
@@ -52,8 +66,26 @@ def wordle():
         stats_msg = f"{message}\nTotal Guesses: {total_guesses}\nCorrect Guesses: {correct_guesses}\nIncorrect Guesses: {incorrect_guesses}"
         gw.show_message(stats_msg)
 
+    root = tk.Tk()
+    top = tk.Toplevel(root)
     gw = WordleGWindow()
     gw.add_enter_listener(enter_action)
 
+    mode_button = tk.Button(root, text="Switch to Colorblind Mode", command=toggle_mode)
+    mode_button.grid(row=N_ROWS + 1, columnspan=N_COLS)  # Adjust the grid position as needed
+
+    location = random.randint(0, (len(FIVE_LETTER_WORDS) - 1))
+    solution = FIVE_LETTER_WORDS[location].upper()
+    print(solution)
+
+    CORRECT_COLOR = "#66BB66"
+    PRESENT_COLOR = "#CCBB66"
+    MISSING_COLOR = "#999999"
+
+    root.mainloop()
+
+# Startup code
+
 if __name__ == "__main__":
     wordle()
+
