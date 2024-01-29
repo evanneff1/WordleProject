@@ -14,13 +14,13 @@ def wordle():
     def toggle_mode():
         nonlocal CORRECT_COLOR, PRESENT_COLOR, MISSING_COLOR
         if mode_button.cget("text") == "Switch to Colorblind Mode":
-            CORRECT_COLOR = "#AAAAAA"  # Change these values for Colorblind Mode
-            PRESENT_COLOR = "#BBBBBB"
-            MISSING_COLOR = "#CCCCCC"
+            CORRECT_COLOR = "#228833"       # Light green for correct letters
+            PRESENT_COLOR = "#CCBB44"       # Brownish yellow for misplaced letters
+            MISSING_COLOR = "#999999"
             mode_button.config(text="Switch to Regular Mode")
         else:
-            CORRECT_COLOR = "#228833"  # Reset to original values for Regular Mode
-            PRESENT_COLOR = "#CCBB44"
+            CORRECT_COLOR = "#66BB66"  # Reset to original values for Regular Mode
+            PRESENT_COLOR = "#CCBB66"
             MISSING_COLOR = "#999999"
             mode_button.config(text="Switch to Colorblind Mode")
 
@@ -62,9 +62,10 @@ def wordle():
 
     location = random.randint(0, (len(FIVE_LETTER_WORDS) - 1))
     solution = FIVE_LETTER_WORDS[location].upper()
+    print(solution)
 
-    CORRECT_COLOR = "#228833"
-    PRESENT_COLOR = "#CCBB44"
+    CORRECT_COLOR = "#66BB66"
+    PRESENT_COLOR = "#CCBB66"
     MISSING_COLOR = "#999999"
 
     root.mainloop()
