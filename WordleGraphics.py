@@ -32,7 +32,7 @@ BOTTOM_MARGIN = 30    		# Bottom margin (pixels)
 MESSAGE_SEP = 20                # Space between board and message center
 
 SQUARE_FONT = ("Helvetica Neue", -44, "bold")
-MESSAGE_FONT = ("Helvetica Neue", -20, "bold")
+MESSAGE_FONT = ("Helvetica Neue", -16, "bold")
 KEY_FONT = ("Helvetica Neue", -18)
 ENTER_FONT = ("Helvetica Neue", -14)
 
