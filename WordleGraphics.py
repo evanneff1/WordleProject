@@ -32,7 +32,7 @@ BOTTOM_MARGIN = 30    		# Bottom margin (pixels)
 MESSAGE_SEP = 20                # Space between board and message center
 
 SQUARE_FONT = ("Helvetica Neue", -44, "bold")
-MESSAGE_FONT = ("Helvetica Neue", -20, "bold")
+MESSAGE_FONT = ("Helvetica Neue", -11, "bold")
 KEY_FONT = ("Helvetica Neue", -18)
 ENTER_FONT = ("Helvetica Neue", -14)
 
@@ -64,6 +64,17 @@ class WordleGWindow:
 
     def __init__(self):
         """Creates the Wordle window."""
+        root = tkinter.Tk()
+        root.title("Wordle")
+        root.protocol("WM_DELETE_WINDOW", root.destroy)
+        self._root = root
+
+        # Create "Play Again" button
+        self.play_again_button = tkinter.Button(root, text="Play Again", command=self.reset_game,
+                                                relief='flat',  # Make the button flat
+                                                activebackground='SystemButtonFace',  # Background when active
+                                                activeforeground='SystemButtonText')  # Text color when active
+        self.play_again_button.pack(side=tkinter.TOP)
 
         def create_grid():
             return [
@@ -206,6 +217,23 @@ class WordleGWindow:
     def show_message(self, msg, color="Black"):
         self._message.set_text(msg, color)
 
+    def reset_game(self):
+        # Reset the game state
+        self.set_current_row(0)
+        for key in self._keys.values():
+            # Reset key colors without affecting text color
+            key.set_color(KEY_COLOR)
+        for row in range(N_ROWS):
+            for col in range(N_COLS):
+                self.set_square_letter(row, col, " ")
+                self.set_square_color(row, col, UNKNOWN_COLOR)
+                self._grid[row][col]._canvas.itemconfig(self._grid[row][col]._text, fill="Black")  # Set text color to black
+        if self._reset_listener:
+            self._reset_listener()
+
+    def add_reset_listener(self, fn):
+        self._reset_listener = fn
+
 
 class WordleSquare:
 
@@ -289,12 +317,9 @@ class WordleKey:
 
     def set_color(self, color):
         self._color = color
-        fg = "White"
-        if color == UNKNOWN_COLOR:
-            fg = "Black"
         self._canvas.itemconfig(self._frame, fill=color)
-        self._canvas.itemconfig(self._text, fill=fg)
-
+        # Keep the text color black
+        self._canvas.itemconfig(self._text, fill="Black")
 
 class WordleMessage:
 
