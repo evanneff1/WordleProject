@@ -1,12 +1,24 @@
 import random
 import tkinter as tk
 from WordleDictionary import FIVE_LETTER_WORDS
-from WordleGraphics import WordleGWindow, N_COLS, N_ROWS
-import tkinter as tk
+from WordleGraphics import WordleGWindow, N_COLS, N_ROWS, CORRECT_COLOR, PRESENT_COLOR, MISSING_COLOR
+
+
 
 def wordle():
+
+    
+    total_guesses = 0
+    correct_guesses = 0
+    incorrect_guesses = 0
+    game_counter = 1
+
+    # Set solution
+    location = random.randint(0, len(FIVE_LETTER_WORDS) - 1)
+    solution = FIVE_LETTER_WORDS[location].upper()
+
     def toggle_mode():
-        nonlocal CORRECT_COLOR, PRESENT_COLOR, MISSING_COLOR
+        global CORRECT_COLOR, PRESENT_COLOR, MISSING_COLOR
         if mode_button.cget("text") == "Switch to Colorblind Mode":
             CORRECT_COLOR = "#228833"       # Light green for correct letters
             PRESENT_COLOR = "#CCBB44"       # Brownish yellow for misplaced letters
@@ -18,13 +30,13 @@ def wordle():
             MISSING_COLOR = "#999999"
             mode_button.config(text="Switch to Colorblind Mode")
 
-    total_guesses = 0
-    correct_guesses = 0
-    incorrect_guesses = 0
-
-    # Set solution
-    location = random.randint(0, len(FIVE_LETTER_WORDS) - 1)
-    solution = FIVE_LETTER_WORDS[location].upper()
+    def reset_game():
+        nonlocal solution, game_counter
+        game_counter += 1  # Increment the game counter
+        location = random.randint(0, len(FIVE_LETTER_WORDS) - 1)
+        solution = FIVE_LETTER_WORDS[location].upper()
+        gw.set_current_row(0)
+        update_statistics() 
 
     def enter_action(s):
         nonlocal total_guesses, correct_guesses, incorrect_guesses
@@ -63,12 +75,15 @@ def wordle():
             update_statistics("Sorry, you didn't get it right.")
 
     def update_statistics(message=""):
-        stats_msg = f"{message}\nTotal Guesses: {total_guesses}\nCorrect Guesses: {correct_guesses}\nIncorrect Guesses: {incorrect_guesses}"
+        nonlocal game_counter  # Include game_counter in the function scope
+        stats_msg = f"{message}\nTotal Guesses: {total_guesses}\nCorrect Guesses: {correct_guesses}\nIncorrect Guesses: {incorrect_guesses}\nGames Played: {game_counter}"
         gw.show_message(stats_msg)
 
-    root = tk.Tk()
-    top = tk.Toplevel(root)
     gw = WordleGWindow()
+    gw.add_enter_listener(enter_action)
+    gw.add_reset_listener(reset_game)  # Add this line
+
+    root = tk.Tk()
     gw.add_enter_listener(enter_action)
 
     mode_button = tk.Button(root, text="Switch to Colorblind Mode", command=toggle_mode)
@@ -84,8 +99,5 @@ def wordle():
 
     root.mainloop()
 
-# Startup code
-
 if __name__ == "__main__":
     wordle()
-
